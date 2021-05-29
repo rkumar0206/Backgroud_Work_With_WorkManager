@@ -5,14 +5,12 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.text.TextUtils
-import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.rohitthebest.work_manager_codelabs.KEY_IMAGE_URI
-import com.rohitthebest.work_manager_codelabs.OUTPUT_VALUE_KEY
+import com.rohitthebest.work_manager_codelabs.PROGRESS
 import timber.log.Timber
-import java.lang.IllegalArgumentException
 
 class BlurWorker(context: Context, workerParameters: WorkerParameters) : Worker(context, workerParameters) {
 
@@ -25,7 +23,13 @@ class BlurWorker(context: Context, workerParameters: WorkerParameters) : Worker(
 
         val resourceUri = inputData.getString(KEY_IMAGE_URI)
 
-        sleep()
+        //sleep()
+
+        (0..100 step 10).forEach {
+
+            setProgressAsync(workDataOf(PROGRESS to it))
+            sleep()
+        }
 
         return try {
 

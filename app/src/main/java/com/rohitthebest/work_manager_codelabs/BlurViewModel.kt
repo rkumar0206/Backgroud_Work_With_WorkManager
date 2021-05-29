@@ -17,10 +17,12 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
     // New instance variable for the WorkInfo
     internal val outputWorkInfos: LiveData<List<WorkInfo>>
+    internal val progressWorkInfos: LiveData<List<WorkInfo>>
 
     init {
 
         outputWorkInfos = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+        progressWorkInfos = workManager.getWorkInfosByTagLiveData(TAG_PROGRESS)
     }
 
     /**
@@ -56,7 +58,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
             if (i == 0) {
                 blurBuilder.setInputData(createInputDataForUri())
             }
-
+            blurBuilder.addTag(TAG_PROGRESS)
             continuation = continuation.then(blurBuilder.build())
         }
 

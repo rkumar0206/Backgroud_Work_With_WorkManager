@@ -39,7 +39,8 @@ class BlurActivity : AppCompatActivity() {
             viewModel.applyBlur(blurLevel)
         }
 
-        viewModel.outputWorkInfos.observe(this, workInfosObserver())
+        viewModel.outputWorkInfos.observe(this, outputObserver())
+        viewModel.progressWorkInfos.observe(this, progressObserver())
 
         binding.seeFileButton.setOnClickListener {
 
@@ -60,7 +61,28 @@ class BlurActivity : AppCompatActivity() {
 
     }
 
-    private fun workInfosObserver(): Observer<List<WorkInfo>> {
+    private fun progressObserver(): Observer<List<WorkInfo>> {
+
+        return Observer { listOfWorkInfo ->
+
+            if (listOfWorkInfo.isNullOrEmpty()) {
+                return@Observer
+            }
+
+            listOfWorkInfo.forEach {workInfo ->
+
+                if(WorkInfo.State.RUNNING == workInfo.state) {
+
+                    val progress = workInfo.progress.getInt(PROGRESS, 0)
+                    binding.progressBar.progress = progress
+                }
+            }
+
+
+        }
+    }
+
+    private fun outputObserver(): Observer<List<WorkInfo>> {
 
         return Observer { listOfWorkInfos ->
 
@@ -125,6 +147,7 @@ class BlurActivity : AppCompatActivity() {
             progressBar.visibility = View.GONE
             cancelButton.visibility = View.GONE
             goButton.visibility = View.VISIBLE
+            progressBar.progress = 0
         }
     }
 

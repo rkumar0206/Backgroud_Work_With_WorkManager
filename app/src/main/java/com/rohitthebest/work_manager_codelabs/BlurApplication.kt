@@ -7,7 +7,6 @@ import timber.log.Timber
 
 class BlurApplication : Application(), Configuration.Provider {
 
-
     override fun onCreate() {
         super.onCreate()
 
